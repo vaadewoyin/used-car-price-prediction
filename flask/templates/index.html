@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Used Car Price Prediction</title>
+</head>
+
+<body>
+    <h1>Used Car Price Prediction</h1>
+    <main>
+        <section class="form">
+            <form action="/prediction" method="post" id="form">
+                <div id="brand">
+                    <label for="brand">Choose car brand</label>
+
+                    <select name="Brand" id="brand" required>
+                        {% for i in brands %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div id="model">
+                    <label for="model">Choose a car model</label>
+                    <select name="Model" id="model" required>
+                        {% for i in models %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                </div>
+                <div id="bodytype">
+                    <label for="bodytype">Choose the Body type</label>
+                    <select name="Body Type" id="bodytype" required>
+                        {% for i in body_types %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                </div>
+                <div id="seats">
+                    <label for="seats">Choose the number of Seats</label>
+                    <select name="Seats (quantity)" id="seats" required>
+                        {% for i in seats %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                </div>
+                <div id="reartyres">
+                    <label for="reartyres">Choose the Rear tyres</label>
+                    <select name="Rear tyres" id="reartyres" required>
+                        {% for i in rear_tyres %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+            <div id="drivenwheels">
+                <label for="drivenwheels">Choose the Drivenwheels</label>
+                <select name="Driven wheels" id="drivenwheels" required>
+                    {% for i in driven_wheels %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+
+
+                <div class="flex">
+                    <div id="powermaximum">
+                        <label for="powermaximum">Enter Maximum Power</label>
+                        <input type="number" placeholder="enter maximum power" min="0" max='200' name="Power maximum (detail)" required>
+                    </div>
+                    <div id="torquemaximum">
+                        <label for="torquemaximum">Enter Maximum Torque</label>
+                        <input type="number" placeholder="enter maximum torque" min='0' max='500'
+                            name="Torque maximum" required>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div id="maximumspeed">
+                        <label for="maximumspeed">Enter Maximum Speed
+                            <input type="number" placeholder="enter maximum speed" name="Maximum/top speed" required min="170",max='300'>
+                    </div>
+                    <div id="year">
+                        <label for="Year">Enter car year
+                            <input type="number" placeholder="enter car year" min='2018' max='2023' name="Year" required>
+                    </div>
+                </div>
+
+
+                <div id="submit"><input type="submit" value="Submit"></div>
+            </form>
+        </section>
+        <section class="right">
+            <div class="banner_image">
+                <img src="/static/car.jpg">
+
+            </div>
+            <div class="price hide">
+                <p>Predicted: 30,000</p>
+            </div>
+
+        </section>
+    </main>
+</body>
+
+</html>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        width: 80%;
+        margin: 0 auto;
+        padding-top: 2em;
+        padding-bottom: 2em;
+        font-family: -apple-system, BlinkMacSystemFont, Roboto, Ubuntu, 'Open Sans', sans-serif;
+        font-size: 0.95em;
+        text-transform: capitalize;
+
+    }
+
+
+    .flex {
+        display: flex;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    main {
+        display: flex;
+    }
+
+    input {
+        border: 1px solid grey;
+    }
+
+    input,
+    select {
+        width: 100%;
+        border-radius: 2px;
+        margin-top: 0.35em;
+        margin-bottom: 1em;
+        padding: 12px 20px;
+    }
+
+    input[type=submit] {
+        padding: 1rem;
+        background-color: green;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.9em;
+        letter-spacing: 0.1em;
+    }
+
+    input::placeholder {
+        text-transform: capitalize;
+    }
+
+    select {
+        border: none;
+        background-color: #f1f1f1;
+    }
+
+    .price {
+        display: none;
+        text-align: center;
+        color: white;
+        font-weight:500;
+        font-size: 1.1em;
+        text-transform: capitalize;
+        letter-spacing: 0.1em;
+        margin: 1rem;
+        margin-top: -0.36rem;
+
+    }
+
+    .price p {
+        padding: 0.79em;
+    }
+
+
+    @media screen and (max-width: 700px) {
+        .banner_image {
+            display: none;
+        }
+
+        .price {
+            margin: 0.5rem 0;
+        }
+
+        main {
+            display: block;
+        }
+    }
+</style>
+<script>
+    document.addEventListener("submit", (e) => {
+        e.preventDefault()
+        price_div = document.querySelector(".price")
+        price_p = document.querySelector(".price p")
+        price_p.textContent=''
+        const form = e.target;
+        fetch(
+            form.action, {
+                method: form.method,
+                body: new FormData(form)
+            }
+        ).then((res) => res.json()).then((text) => {
+            predicted = text['price']
+            let formatting_options = {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 3,
+            }
+            let dollarString = new Intl.NumberFormat("en-US", formatting_options)
+            let displayString = dollarString.format(predicted)
+
+  
+            price_p.textContent = `Predicted: ${displayString}`
+            price_div.style.display = 'block';
+            price_div.style.backgroundColor = 'green';
+
+        }).catch(err => {
+            price_div = document.querySelector(".price")
+            price_p = document.querySelector(".price p")
+            price_p.textContent = `Unable to fetch predictions`
+            price_div.style.display = 'block';
+            price_div.style.backgroundColor = 'red'
+            price_div.style.Color = 'white'
+            console.log(err)
+        })
+
+    })
+</script>
