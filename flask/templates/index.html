@@ -24,7 +24,7 @@
                 </div>
 
                 <div id="model">
-                    <label for="model">Choose a car model</label>
+                    <label for="model">Choose car model</label>
                     <select name="Model" id="model" required>
                         {% for i in models %}
                         <option value="{{i}}">{{i}}</option>
@@ -223,11 +223,11 @@
             predicted = text['price']
             let formatting_options = {
                 style: 'currency',
-                currency: 'USD',
+                currency: 'ZAR',
                 minimumFractionDigits: 3,
             }
-            let dollarString = new Intl.NumberFormat("en-US", formatting_options)
-            let displayString = dollarString.format(predicted)
+            let randString = new Intl.NumberFormat("en-ZA", formatting_options)
+            let displayString = randString.format(predicted)
 
   
             price_p.textContent = `Predicted: ${displayString}`
